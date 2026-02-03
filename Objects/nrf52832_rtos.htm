@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Objects\nrf52832_rtos.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Objects\nrf52832_rtos.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6220000: Last Updated: Tue Feb  3 15:33:25 2026
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6220000: Last Updated: Tue Feb  3 17:51:50 2026
 <BR><P>
 <H3>Maximum Stack Usage =         32 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -16,13 +16,13 @@ Functions with no stack information
  <LI><a href="#[43]">Kernel_Init</a>
  <LI><a href="#[44]">Kernel_Task_Create</a>
  <LI><a href="#[45]">Kernel_Start_Tasks</a>
- <LI><a href="#[9]">SysTick_Handler</a>
+ <LI><a href="#[7d]">RTC0_Handler</a>
  <LI><a href="#[8]">PendSV_Handler</a>
- <LI><a href="#[7d]">Kernel_Task_Sleep</a>
- <LI><a href="#[7e]">Kernel_Tick_SS32_Get</a>
- <LI><a href="#[7f]">Kernel_Tick_SS64_Get</a>
- <LI><a href="#[80]">Kernel_Tick_S_Get</a>
- <LI><a href="#[81]">Kernel_CPU_Usage_Get</a>
+ <LI><a href="#[7e]">Kernel_Task_Sleep</a>
+ <LI><a href="#[7f]">Kernel_Tick_SS32_Get</a>
+ <LI><a href="#[80]">Kernel_Tick_SS64_Get</a>
+ <LI><a href="#[81]">Kernel_Tick_S_Get</a>
+ <LI><a href="#[82]">Kernel_CPU_Usage_Get</a>
 </UL>
 </UL>
 <P>
@@ -36,6 +36,7 @@ Mutually Recursive functions
  <LI><a href="#[5]">UsageFault_Handler</a>&nbsp;&nbsp;&nbsp;&rArr;&nbsp;&nbsp;&nbsp;<a href="#[5]">UsageFault_Handler</a><BR>
  <LI><a href="#[6]">SVC_Handler</a>&nbsp;&nbsp;&nbsp;&rArr;&nbsp;&nbsp;&nbsp;<a href="#[6]">SVC_Handler</a><BR>
  <LI><a href="#[7]">DebugMon_Handler</a>&nbsp;&nbsp;&nbsp;&rArr;&nbsp;&nbsp;&nbsp;<a href="#[7]">DebugMon_Handler</a><BR>
+ <LI><a href="#[9]">SysTick_Handler</a>&nbsp;&nbsp;&nbsp;&rArr;&nbsp;&nbsp;&nbsp;<a href="#[9]">SysTick_Handler</a><BR>
  <LI><a href="#[19]">CCM_AAR_IRQHandler</a>&nbsp;&nbsp;&nbsp;&rArr;&nbsp;&nbsp;&nbsp;<a href="#[19]">CCM_AAR_IRQHandler</a><BR>
 </UL>
 <P>
@@ -80,7 +81,7 @@ Function Pointers
  <LI><a href="#[21]">SWI3_EGU3_IRQHandler</a> from arm_startup_nrf52.o(.text) referenced from arm_startup_nrf52.o(RESET)
  <LI><a href="#[22]">SWI4_EGU4_IRQHandler</a> from arm_startup_nrf52.o(.text) referenced from arm_startup_nrf52.o(RESET)
  <LI><a href="#[23]">SWI5_EGU5_IRQHandler</a> from arm_startup_nrf52.o(.text) referenced from arm_startup_nrf52.o(RESET)
- <LI><a href="#[9]">SysTick_Handler</a> from kernel.o(.text) referenced from arm_startup_nrf52.o(RESET)
+ <LI><a href="#[9]">SysTick_Handler</a> from arm_startup_nrf52.o(.text) referenced from arm_startup_nrf52.o(RESET)
  <LI><a href="#[30]">SystemInit</a> from system_nrf52.o(.text.SystemInit) referenced from arm_startup_nrf52.o(.text)
  <LI><a href="#[16]">TEMP_IRQHandler</a> from arm_startup_nrf52.o(.text) referenced from arm_startup_nrf52.o(RESET)
  <LI><a href="#[12]">TIMER0_IRQHandler</a> from arm_startup_nrf52.o(.text) referenced from arm_startup_nrf52.o(RESET)
@@ -265,21 +266,20 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[3d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[9]"></a>SysTick_Handler</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, kernel.o(.text))
-<BR>[Address Reference Count : 1]<UL><LI> arm_startup_nrf52.o(RESET)
-</UL>
+<P><STRONG><a name="[7d]"></a>RTC0_Handler</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, kernel.o(.text), UNUSED)
+
 <P><STRONG><a name="[8]"></a>PendSV_Handler</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, kernel.o(.text))
 <BR>[Address Reference Count : 1]<UL><LI> arm_startup_nrf52.o(RESET)
 </UL>
-<P><STRONG><a name="[7d]"></a>Kernel_Task_Sleep</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, kernel.o(.text), UNUSED)
+<P><STRONG><a name="[7e]"></a>Kernel_Task_Sleep</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, kernel.o(.text), UNUSED)
 
-<P><STRONG><a name="[7e]"></a>Kernel_Tick_SS32_Get</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, kernel.o(.text), UNUSED)
+<P><STRONG><a name="[7f]"></a>Kernel_Tick_SS32_Get</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, kernel.o(.text), UNUSED)
 
-<P><STRONG><a name="[7f]"></a>Kernel_Tick_SS64_Get</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, kernel.o(.text), UNUSED)
+<P><STRONG><a name="[80]"></a>Kernel_Tick_SS64_Get</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, kernel.o(.text), UNUSED)
 
-<P><STRONG><a name="[80]"></a>Kernel_Tick_S_Get</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, kernel.o(.text), UNUSED)
+<P><STRONG><a name="[81]"></a>Kernel_Tick_S_Get</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, kernel.o(.text), UNUSED)
 
-<P><STRONG><a name="[81]"></a>Kernel_CPU_Usage_Get</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, kernel.o(.text), UNUSED)
+<P><STRONG><a name="[82]"></a>Kernel_CPU_Usage_Get</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, kernel.o(.text), UNUSED)
 
 <P><STRONG><a name="[0]"></a>Reset_Handler</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, arm_startup_nrf52.o(.text))
 <BR>[Address Reference Count : 1]<UL><LI> arm_startup_nrf52.o(RESET)
@@ -330,6 +330,13 @@ Global Symbols
 <BR><BR>[Calls]<UL><LI><a href="#[7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DebugMon_Handler
 </UL>
 <BR>[Called By]<UL><LI><a href="#[7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DebugMon_Handler
+</UL>
+<BR>[Address Reference Count : 1]<UL><LI> arm_startup_nrf52.o(RESET)
+</UL>
+<P><STRONG><a name="[9]"></a>SysTick_Handler</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, arm_startup_nrf52.o(.text))
+<BR><BR>[Calls]<UL><LI><a href="#[9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Handler
+</UL>
+<BR>[Called By]<UL><LI><a href="#[9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Handler
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> arm_startup_nrf52.o(RESET)
 </UL>
@@ -452,11 +459,11 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[39]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__user_setup_stackheap
 </UL>
 
-<P><STRONG><a name="[82]"></a>__use_two_region_memory</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, heapauxi.o(.text), UNUSED)
+<P><STRONG><a name="[83]"></a>__use_two_region_memory</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, heapauxi.o(.text), UNUSED)
 
-<P><STRONG><a name="[83]"></a>__rt_heap_escrow$2region</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, heapauxi.o(.text), UNUSED)
+<P><STRONG><a name="[84]"></a>__rt_heap_escrow$2region</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, heapauxi.o(.text), UNUSED)
 
-<P><STRONG><a name="[84]"></a>__rt_heap_expand$2region</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, heapauxi.o(.text), UNUSED)
+<P><STRONG><a name="[85]"></a>__rt_heap_expand$2region</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, heapauxi.o(.text), UNUSED)
 
 <P><STRONG><a name="[39]"></a>__user_setup_stackheap</STRONG> (Thumb, 74 bytes, Stack size 8 bytes, sys_stackheap_outer.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = __user_setup_stackheap
@@ -476,23 +483,23 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[3c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rt_entry_main
 </UL>
 
-<P><STRONG><a name="[85]"></a>__user_libspace</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, libspace.o(.text), UNUSED)
+<P><STRONG><a name="[86]"></a>__user_libspace</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, libspace.o(.text), UNUSED)
 
 <P><STRONG><a name="[46]"></a>__user_perproc_libspace</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, libspace.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[39]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__user_setup_stackheap
 </UL>
 
-<P><STRONG><a name="[86]"></a>__user_perthread_libspace</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, libspace.o(.text), UNUSED)
+<P><STRONG><a name="[87]"></a>__user_perthread_libspace</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, libspace.o(.text), UNUSED)
 
 <P><STRONG><a name="[42]"></a>_sys_exit</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, sys_exit.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[41]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rt_exit_exit
 </UL>
 
-<P><STRONG><a name="[87]"></a>__I$use$semihosting</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, use_no_semi.o(.text), UNUSED)
+<P><STRONG><a name="[88]"></a>__I$use$semihosting</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, use_no_semi.o(.text), UNUSED)
 
-<P><STRONG><a name="[88]"></a>__use_no_semihosting_swi</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, use_no_semi.o(.text), UNUSED)
+<P><STRONG><a name="[89]"></a>__use_no_semihosting_swi</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, use_no_semi.o(.text), UNUSED)
 
-<P><STRONG><a name="[89]"></a>__semihosting_library_function</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, indicate_semi.o(.text), UNUSED)
+<P><STRONG><a name="[8a]"></a>__semihosting_library_function</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, indicate_semi.o(.text), UNUSED)
 
 <P><STRONG><a name="[55]"></a>SystemCoreClockUpdate</STRONG> (Thumb, 20 bytes, Stack size 0 bytes, system_nrf52.o(.text.SystemCoreClockUpdate))
 <BR><BR>[Called By]<UL><LI><a href="#[30]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemInit
@@ -531,9 +538,9 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[36]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rt_lib_init_fp_1
 </UL>
 
-<P><STRONG><a name="[8a]"></a>__fplib_config_fpu_vfp</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, fpinit.o(x$fpl$fpinit), UNUSED)
+<P><STRONG><a name="[8b]"></a>__fplib_config_fpu_vfp</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, fpinit.o(x$fpl$fpinit), UNUSED)
 
-<P><STRONG><a name="[8b]"></a>__fplib_config_pureend_doubles</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, fpinit.o(x$fpl$fpinit), UNUSED)
+<P><STRONG><a name="[8c]"></a>__fplib_config_pureend_doubles</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, fpinit.o(x$fpl$fpinit), UNUSED)
 <P>
 <H3>
 Local Symbols

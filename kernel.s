@@ -34,8 +34,7 @@ EDF_SRAMM_END         EQU        0x2000FFFF
 DEF_PERIPHERAL_BASE   EQU        0x40000000
 DEF_APB_BASE          EQU        DEF_PERIPHERAL_BASE + 0x00000000
 DEF_AHB_BASE          EQU        DEF_PERIPHERAL_BASE + 0x10000000
-DEF_IOPORT_BASE       EQU        DEF_AHB_BASE        + 0x00000000
-DEF_GPIO_BASE         EQU        DEF_IOPORT_BASE     + 0x00000000
+DEF_GPIO_BASE         EQU        DEF_AHB_BASE        + 0x00000000
 DEF_FLASH_BASE        EQU        DEF_CODE_BASE       + 0x08000000
 DEF_CLOCK_BASE        EQU        DEF_APB_BASE        + 0x00000000
 DEF_POWER_BASE        EQU        DEF_APB_BASE        + 0x00000000
@@ -49,12 +48,32 @@ DEF_SCB_BASE          EQU        0xE000ED00
 
 
 
-;;============================define systick addresses starting==============================;; 
-DEF_STK_CTRL          EQU        DEF_SCS_BASE        + 0x00000000
-DEF_STK_LOAD          EQU        DEF_SCS_BASE        + 0x00000004
-DEF_STK_VAL           EQU        DEF_SCS_BASE        + 0x00000008
-DEF_STK_CALIB         EQU        DEF_SCS_BASE        + 0x0000000C
-;;===============================define systick addresses end================================;;
+;;==============================define CLOCK addresses starting==============================;; 
+DEF_CLOCK_LFCLKSTART  EQU        DEF_CLOCK_BASE      + 0x00000008
+DEF_CLOCK_LFCLKSTOP   EQU        DEF_CLOCK_BASE      + 0x0000000C
+DEF_CLOCK_EVENTS_LFS  EQU        DEF_CLOCK_BASE      + 0x00000104
+DEF_CLOCK_INTENSET    EQU        DEF_CLOCK_BASE      + 0x00000304
+DEF_CLOCK_LFCLKRUN    EQU        DEF_CLOCK_BASE      + 0x00000414
+DEF_CLOCK_LFCLKSTAT   EQU        DEF_CLOCK_BASE      + 0x00000418
+DEF_CLOCK_LFCLKSRC    EQU        DEF_CLOCK_BASE      + 0x00000518
+;;================================define CLOCK addresses end=================================;;
+
+
+
+
+
+;;==============================define RTC0 addresses starting===============================;; 
+DEF_RTC0_TASKS_START  EQU        DEF_RTC0_BASE       + 0x00000000
+DEF_RTC0_TASKS_STOP   EQU        DEF_RTC0_BASE       + 0x00000004
+DEF_RTC0_TASKS_CLEAR  EQU        DEF_RTC0_BASE       + 0x00000008
+DEF_RTC0_EVENS_CMP0   EQU        DEF_RTC0_BASE       + 0x00000140
+DEF_RTC0_INTENSET     EQU        DEF_RTC0_BASE       + 0x00000304
+DEF_RTC0_INTENCLR     EQU        DEF_RTC0_BASE       + 0x00000308
+DEF_RTC0_EVTENSET     EQU        DEF_RTC0_BASE       + 0x00000344
+DEF_RTC0_EVTENCLR     EQU        DEF_RTC0_BASE       + 0x00000348
+DEF_RTC0_PRESCALER    EQU        DEF_RTC0_BASE       + 0x00000508
+DEF_RTC0_CC0          EQU        DEF_RTC0_BASE       + 0x00000540
+;;================================define RTC0 addresses end==================================;;
 
 
 
@@ -95,16 +114,13 @@ DEF_SCB_SHPR3         EQU        DEF_SCB_BASE        + 0x00000020
 
 
 ;;===========================define GPIO related addresses starting==========================;; 
-;DEF_RCC_IOPENR        EQU        DEF_RCC_BASE        + 0x00000034
-DEF_GPIOA_BASE        EQU        DEF_GPIO_BASE       + 0x00000000
-DEF_GPIOB_BASE        EQU        DEF_GPIO_BASE       + 0x00000400
-DEF_GPIOC_BASE        EQU        DEF_GPIO_BASE       + 0x00000800
-DEF_GPIOD_BASE        EQU        DEF_GPIO_BASE       + 0x00000C00
-DEF_GPIOE_BASE        EQU        DEF_GPIO_BASE       + 0x00001000
-DEF_GPIOF_BASE        EQU        DEF_GPIO_BASE       + 0x00001400
-DEF_GPIOA_MODER       EQU        DEF_GPIOA_BASE      + 0x00000000
-DEF_GPIOA_ODR         EQU        DEF_GPIOA_BASE      + 0x00000014
-DEF_GPIOA_BSRR        EQU        DEF_GPIOA_BASE      + 0x00000018
+DEF_GPIO_P0_OUT       EQU        DEF_GPIO_BASE       + 0x00000504
+DEF_GPIO_P0_OUTSET    EQU        DEF_GPIO_BASE       + 0x00000508
+DEF_GPIO_P0_OUTCLR    EQU        DEF_GPIO_BASE       + 0x0000050C
+DEF_GPIO_P0_IN        EQU        DEF_GPIO_BASE       + 0x00000510
+DEF_GPIO_P0_DIR       EQU        DEF_GPIO_BASE       + 0x00000514
+DEF_GPIO_P0_DIRSET    EQU        DEF_GPIO_BASE       + 0x00000518
+DEF_GPIO_P0_DIRCLR    EQU        DEF_GPIO_BASE       + 0x0000051C
 ;;=============================define GPIO related addresses end=============================;; 
 
 
@@ -207,7 +223,7 @@ KER_TASK_STS          SPACE      4*DEF_KER_MAX_NTASK               ;task status
 					  EXPORT     Kernel_Tick_SS64_Get
 					  EXPORT     Kernel_Tick_S_Get
 				      EXPORT     Kernel_CPU_Usage_Get
-					  EXPORT     SysTick_Handler
+					  EXPORT     RTC0_Handler
 					  EXPORT     PendSV_Handler
 ;;===========================global function declaration end=================================;; 
 
@@ -252,27 +268,19 @@ KER_TASK_STS          SPACE      4*DEF_KER_MAX_NTASK               ;task status
 					  MACRO_GPIO_INIT                              ;macro name
 					  
 					  ;enable clock from rcc
-;                      LDR        R0,   =DEF_RCC_IOPENR             ;load IOPENR address
-					  LDR        R1,   [R0]                        ;load IOPENR val
-					  LDR        R2,   =0x00000001                 ;mask bit0
+                      LDR        R0,   =DEF_GPIO_P0_DIR            ;load DIR address
+					  LDR        R1,   [R0]                        ;load DIR val
+					  LDR        R2,   =0x08000000                 ;mask bit27
 	                  ORRS       R1,   R1, R2                      ;set bit 0
-					  STR        R1,   [R0]                        ;store val to IOPENR
+					  STR        R1,   [R0]                        ;store val to DIR
 					  
 					  ;set ODR pin low
-					  LDR        R0,   =DEF_GPIOA_ODR              ;load ODR address
-					  LDR        R1,   [R0]                        ;load ODR val
-					  LDR        R2,   =0xFFF0                     ;bit0-bit3 clear
-					  ANDS       R1,   R1, R2                      ;set bit of the pins
-					  STR        R1,   [R0]                        ;store val to ODR
+					  LDR        R0,   =DEF_GPIO_P0_OUTCLR         ;load OUTCLR address
+					  LDR        R1,   [R0]                        ;load OUTCLR val
+					  LDR        R2,   =0x08000000                 ;set bit27
+	                  ORRS       R1,   R1, R2                      ;set bit 0
+					  STR        R1,   [R0]                        ;store val to OUTCLR
 					  
-					  ;set pin as general purpose i/o
-					  LDR        R0,   =DEF_GPIOA_MODER            ;load MODER address
-					  LDR        R1,   [R0]                        ;load MODER val
-					  LDR        R2,   =0xFFFFFF00                 ;to clear mode0-3
-					  ANDS       R1,   R1, R2                      ;clear mode0-3
-					  LDR        R2,   =0x00000055                 ;to output mode
-					  ORRS       R1,   R1, R2                      ;set output mode
-					  STR        R1,   [R0]                        ;store val GPIOA
                       MEND                                         ;macro end
 ;;==============================macro for gpio init end======================================;; 
 
@@ -283,8 +291,8 @@ KER_TASK_STS          SPACE      4*DEF_KER_MAX_NTASK               ;task status
 ;;===========================macro for gpio set starting=====================================;; 
                       MACRO                                        ;macro start
 					  MACRO_GPIO_SET                               ;macro name
-					  LDR        R0,   =0x50000018                 ;load BSRR address
-					  LDR        R1,   =0x00000001                 ;bit0 set
+					  LDR        R0,   =DEF_GPIO_P0_OUTSET         ;load OUTSET address
+					  LDR        R1,   =0x08000000                 ;bit27 set
 					  STR        R1,   [R0]                        ;store val
                       MEND                                         ;macro end
 ;;=============================macro for gpio set end========================================;; 
@@ -296,8 +304,8 @@ KER_TASK_STS          SPACE      4*DEF_KER_MAX_NTASK               ;task status
 ;;===========================macro for gpio clear starting===================================;; 
 					  MACRO                                        ;macro start
                       MACRO_GPIO_CLEAR                             ;macro name
-					  LDR        R0,   =0x50000018                 ;load BSRR address
-					  LDR        R1,   =0x00010000                 ;bit0 clear
+					  LDR        R0,   =DEF_GPIO_P0_OUTCLR         ;load OUTSET address
+					  LDR        R1,   =0x08000000                 ;bit27 set
 					  STR        R1,   [R0]                        ;store val
 					  MEND                                         ;macro end
 ;;=============================macro for gpio clear end======================================;; 
@@ -739,17 +747,44 @@ Kernel_Task_Create
 
 ;;=================================start tasks starting======================================;; 
 Kernel_Start_Tasks
-                      ;configure SysTick timer
-                      LDR        R0,   =DEF_STK_LOAD               ;load stk_load reg address
-					  LDR        R1,   =15999                      ;load val for 1ms
+                      ;configure system timer
+                      LDR        R0,   =DEF_CLOCK_LFCLKSRC         ;load LFCLKSRC reg address
+					  LDR        R1,   =0x00000000                 ;load val for RC
 					  STR        R1,   [R0]                        ;set val to reg
-					  LDR        R0,   =DEF_STK_VAL                ;load stk_val reg address
-					  MOVS       R1,   #0                          ;clear reg
-					  STR        R1,   [R0]                        ;clear stk_val reg
-					  LDR        R0,   =DEF_STK_CTRL               ;load stk_ctrl reg address
-					  MOVS       R1,   #7                          ;mask bit0, bit1 & bit2
-					  STR        R1,   [R0]                        ;set val to stk_ctrl
 					  
+					  LDR        R0,   =DEF_CLOCK_EVENTS_LFS       ;load LFCLKSTARTED reg address
+					  LDR        R1,   =0x00000000                 ;clear event
+					  STR        R1,   [R0]                        ;set val to reg
+
+					  LDR        R0,   =DEF_CLOCK_LFCLKSTART       ;load LFCLKSTART reg address
+					  LDR        R1,   =0x00000001                 ;load val 1 to start
+					  STR        R1,   [R0]                        ;set val to reg
+
+Kernel_Clock_Not_Ready  
+                      LDR        R0,   =DEF_CLOCK_EVENTS_LFS       ;load LFCLKSTARTED reg address
+					  LDR        R0,   [R0]                        ;load reg val
+					  BEQ        Kernel_Clock_Not_Ready            ;wait until clock is ready
+					  
+                      LDR        R0,   =DEF_RTC0_TASKS_STOP        ;load TASKS_STOP reg address
+					  LDR        R1,   =0x00000001                 ;load val
+					  STR        R1,   [R0]                        ;set val to reg
+
+					  LDR        R0,   =DEF_RTC0_PRESCALER         ;load PRESCALER reg address
+					  LDR        R1,   =0x00000000                 ;load val
+					  STR        R1,   [R0]                        ;set val to reg
+
+					  LDR        R0,   =DEF_RTC0_CC0               ;load CC[0] reg address
+					  LDR        R1,   =0x00008000                 ;load val
+					  STR        R1,   [R0]                        ;set val to reg
+
+					  LDR        R0,   =DEF_RTC0_EVTENSET          ;load EVTENSET reg address
+					  LDR        R1,   =0x00010000                 ;load val
+					  STR        R1,   [R0]                        ;set val to reg
+
+					  LDR        R0,   =DEF_RTC0_INTENSET          ;load INTENSET reg address
+					  LDR        R1,   =0x00010000                 ;load val
+					  STR        R1,   [R0]                        ;set val to reg
+
 					  ;calculate stack top for this task
 					  LDR        R0,   =DEF_KER_STACK_SIZE         ;load each stack size
 					  LDR        R1,   =KER_TASK_STACK             ;PSP start base
@@ -770,7 +805,7 @@ Kernel_Start_Tasks
 
 
 ;;=================================systick isr starting======================================;; 
-SysTick_Handler
+RTC0_Handler
                       ;request for PendSV
 					  LDR        R0,   =DEF_SCB_ICSR               ;load SCB->ICSR addr
 					  LDR        R1,   =0x10000000                 ;load set_PendSV bit
